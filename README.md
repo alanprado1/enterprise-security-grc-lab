@@ -74,5 +74,5 @@ VMware Workstation Pro · pfSense CE · Cowrie · Kali Linux · Windows Server 2
 
 ## About this project
 
-Built as a portfolio project to demonstrate practical, end-to-end security engineering — from network design through to governance reporting — on a near-zero budget using free-tier cloud services and open-source tooling.
+Built as a portfolio project to demonstrate practical, end-to-end security engineering from network design through to governance reporting on a near-zero budget using free-tier cloud services and open-source tooling.
 
