@@ -41,4 +41,16 @@ A simpler design might use just a DMZ and an internal zone. Four zones were chos
 - **Simulated Internet zone** exists so the attacking machine (Kali) is architecturally identical to a real external attacker, without ever touching a real public IP or risking an ISP abuse complaint for generating brute-force traffic on a residential connection.
 - **DMZ** hosts only the honeypot — nothing else. If it were shared with other services, a compromise of the honeypot would put those services at risk too.
 - **Internal zone** simulates a real corporate endpoint, generating legitimate background telemetry (Windows Security Events) that a SOC analyst would need to distinguish from attacker activity.
-- **Management zone** is isolated because in a real enterprise, security tooling (SOAR platforms, SIEM collectors) sits on a hardened network that ordinary user traffic — and certainly internet traffic — should never be able to reach.
+- **Management zone** is isolated because in a real enterprise, security tooling (SOAR platforms, SIEM collectors) sits on a hardened network that ordinary user traffic, and certainly internet traffic should never be able to reach.
+
+## IP address scheme
+
+| Zone | Subnet | Gateway (pfSense) | Hosts |
+|---|---|---|---|
+| Simulated Internet | 10.0.0.0/24 | 10.0.0.1 | Kali - 10.0.0.10 |
+| DMZ | 192.168.10.0/24 | 192.168.10.1 | Cowrie - 192.168.10.10 |
+| Internal | 192.168.20.0/24 | 192.168.20.1 | Windows Server - 192.168.20.10 |
+| Management | 192.168.30.0/24 | 192.168.30.1 | Shuffle SOAR - 192.168.30.10 |
+
+The Simulated Internet zone deliberately uses a different address class (10.x rather than 192.168.x) so that, when reviewing logs or diagrams later, it's immediately visually obvious which traffic originates from the "outside".
+
