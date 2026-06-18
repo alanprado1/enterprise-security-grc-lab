@@ -90,10 +90,10 @@ Mapped at the design stage so that the attack simulation in Phase 3 would have s
 - **A.8.16 Monitoring Activities** → satisfied by the Cowrie → Sentinel log pipeline
 - **A.8.7 Protection Against Malware** → satisfied by Windows Defender running on the Windows Server VM
 
-Full evidence for each control is documented in [Phase 4 — GRC Mapping](phase-4-grc.md).
+Full evidence for each control is documented in [Phase 4 - GRC Mapping](phase-4-grc.md).
 
 ## Outcome of this phase
 
-A finalized network diagram, IP scheme, firewall policy, and resource budget — all decided before build work began. This avoided the most common failure mode in lab projects: discovering a segmentation gap or resource shortfall halfway through the build and having to retrofit the design.
+A finalized network diagram, IP scheme, firewall policy, and resource budget, all decided before build work began. This avoided the most common failure mode in lab projects: discovering a segmentation gap or resource shortfall halfway through the build and having to retrofit the design.
 
-Continue to [Phase 2 — Build & Configuration](phase-2-build.md)
+Continue to [Phase 2 - Build & Configuration](phase-2-build.md)
