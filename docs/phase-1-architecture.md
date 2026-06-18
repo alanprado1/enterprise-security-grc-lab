@@ -74,3 +74,26 @@ Planned against a 16GB RAM host before any VM was built:
 | Kali Linux | Simulated attacker | 2 GB |
 | Shuffle SOAR (Ubuntu) | SOAR orchestration | 4.9 GB |
 | **Total** | | **~9.9 GB**, leaving headroom for the VMware host process and Windows 11 itself |
+
+## MITRE ATT&CK techniques in scope
+
+Mapped at the design stage so that the attack simulation in Phase 3 would have specific, named techniques to demonstrate rather than vague "attack testing":
+
+- **T1110** — Brute Force (Kali performs, Cowrie detects)
+- **T1595** — Active Scanning (Kali performs, Cowrie/pfSense detects)
+- **T1046** — Network Service Discovery (Kali performs, Cowrie/pfSense detects)
+- **T1562** — Impair Defenses (simulated firewall rule failure scenario)
+
+## ISO 27001 controls mapped at design stage
+
+- **A.8.20 Network Security** → satisfied by the pfSense segmentation and zero-egress policy
+- **A.8.16 Monitoring Activities** → satisfied by the Cowrie → Sentinel log pipeline
+- **A.8.7 Protection Against Malware** → satisfied by Windows Defender running on the Windows Server VM
+
+Full evidence for each control is documented in [Phase 4 — GRC Mapping](phase-4-grc.md).
+
+## Outcome of this phase
+
+A finalized network diagram, IP scheme, firewall policy, and resource budget — all decided before build work began. This avoided the most common failure mode in lab projects: discovering a segmentation gap or resource shortfall halfway through the build and having to retrofit the design.
+
+Continue to [Phase 2 — Build & Configuration](phase-2-build.md)
