@@ -58,9 +58,9 @@ The Simulated Internet zone deliberately uses a different address class (10.x ra
 
 Two rules govern every firewall decision made throughout the build:
 
-**Zero-egress from the DMZ.** The honeypot can receive connections, but cannot initiate any outbound connection of its own, anywhere. This is the single most important control in the lab — it guarantees that even a fully compromised honeypot cannot be used to pivot, exfiltrate data, or contact a real command-and-control server.
+**Zero-egress from the DMZ.** The honeypot can receive connections, but cannot initiate any outbound connection of its own, anywhere. This is the single most important control in the lab, it guarantees that even a fully compromised honeypot cannot be used to pivot, exfiltrate data, or contact a real command-and-control server.
 
-**Least privilege between every other zone.** No zone is permitted to reach another zone by default. Specific allow rules were added only where a real operational need existed — for example, the Internal zone is allowed outbound on port 443 specifically so Windows Security Events can reach Sentinel, and nothing else.
+**Least privilege between every other zone.** No zone is permitted to reach another zone by default. Specific allow rules were added only where a real operational need existed, for example, the Internal zone is allowed outbound on port 443 specifically so Windows Security Events can reach Sentinel, and nothing else.
 
 ## VM resource budget
 
@@ -69,7 +69,7 @@ Planned against a 16GB RAM host before any VM was built:
 | VM | Role | RAM allocated |
 |---|---|---|
 | pfSense | Firewall / router | 512 MB |
-| Cowrie (Ubuntu) | Honeypot — DMZ | 512 MB |
+| Cowrie (Ubuntu) | Honeypot - DMZ | 512 MB |
 | Windows Server 2025 | Internal endpoint telemetry | 2 GB |
 | Kali Linux | Simulated attacker | 2 GB |
 | Shuffle SOAR (Ubuntu) | SOAR orchestration | 4.9 GB |
