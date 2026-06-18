@@ -8,7 +8,7 @@ A simulated attacker probes a deliberately exposed honeypot, the honeypot's acti
 
 | Domain | What's built |
 |---|---|
-| Network architecture | Segmented VMware lab — DMZ, internal zone, management zone, and a simulated internet zone — enforced by a pfSense firewall with a zero-egress policy isolating the honeypot |
+| Network architecture | Segmented VMware lab - DMZ, internal zone, management zone, and a simulated internet zone, enforced by a pfSense firewall with a zero-egress policy isolating the honeypot |
 | Deception technology | Cowrie honeypot emulating SSH and Telnet, with full session capture and structured JSON logging |
 | Detection & SIEM | Microsoft Sentinel ingesting honeypot and Windows Security Event logs, with custom KQL analytics rules and entity-mapped incidents |
 | SOAR automation | Automated incident response via direct Sentinel REST API integration, with Shuffle SOAR deployed as the orchestration platform |
