@@ -36,23 +36,23 @@ Full network diagram and IP scheme: [`docs/phase-1-architecture.md`](docs/phase-
 
 The build is documented phase by phase, matching how it was actually executed:
 
-- [Phase 1 — Architecture & Design](docs/phase-1-architecture.md)
-- [Phase 2 — Build & Configuration](docs/phase-2-build.md)
-- [Phase 3 — Detection & SOAR](docs/phase-3-detection.md)
-- [Phase 4 — GRC Mapping & Documentation](docs/phase-4-grc.md)
+- [Phase 1 - Architecture & Design](docs/phase-1-architecture.md)
+- [Phase 2 - Build & Configuration](docs/phase-2-build.md)
+- [Phase 3 - Detection & SOAR](docs/phase-3-detection.md)
+- [Phase 4 - GRC Mapping & Documentation](docs/phase-4-grc.md)
 
 Architecture decisions are recorded individually:
 
-- [ADR-01 — Cowrie over T-Pot](docs/adrs/adr-01-cowrie-over-tpot.md)
-- [ADR-02 — Sentinel over Wazuh](docs/adrs/adr-02-sentinel-over-wazuh.md)
-- [ADR-03 — pfSense over OPNsense](docs/adrs/adr-03-pfsense-over-opnsense.md)
-- [ADR-04 — Shuffle SOAR + Python integration layer](docs/adrs/adr-04-shuffle-soar-choice.md)
-- [ADR-05 — Manual provisioning over IaC](docs/adrs/adr-05-manual-provisioning.md)
+- [ADR-01 - Cowrie over T-Pot](docs/adrs/adr-01-cowrie-over-tpot.md)
+- [ADR-02 - Sentinel over Wazuh](docs/adrs/adr-02-sentinel-over-wazuh.md)
+- [ADR-03 - pfSense over OPNsense](docs/adrs/adr-03-pfsense-over-opnsense.md)
+- [ADR-04 - Shuffle SOAR + Python integration layer](docs/adrs/adr-04-shuffle-soar-choice.md)
+- [ADR-05 - Manual provisioning over IaC](docs/adrs/adr-05-manual-provisioning.md)
 
 Incident response playbooks:
 
-- [Playbook 01 — SSH Brute Force Response](docs/playbooks/playbook-01-brute-force.md)
-- [Playbook 02 — Firewall Egress Failure Response](docs/playbooks/playbook-02-firewall-failure.md)
+- [Playbook 01 - SSH Brute Force Response](docs/playbooks/playbook-01-brute-force.md)
+- [Playbook 02 - Firewall Egress Failure Response](docs/playbooks/playbook-02-firewall-failure.md)
 
 ## Skills demonstrated
 
