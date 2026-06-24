@@ -1,0 +1,40 @@
+{
+  "kind": "Scheduled",
+  "properties": {
+    "displayName": "Cowrie Port Scan Detection",
+    "description": "Detects network reconnaissance and port scanning against the Cowrie honeypot",
+    "severity": "Medium",
+    "enabled": true,
+    "query": "CowrieLogs_CL | where eventid_s == 'cowrie.session.connect' | summarize ConnectionCount = count() by src_ip_s, bin(TimeGenerated, 1m) | where ConnectionCount >= 10 | project TimeGenerated, src_ip_s, ConnectionCount",
+    "queryFrequency": "PT5M",
+    "queryPeriod": "PT1H",
+    "triggerOperator": "GreaterThan",
+    "triggerThreshold": 0,
+    "suppressionDuration": "PT1H",
+    "suppressionEnabled": false,
+    "tactics": ["Reconnaissance", "Discovery"],
+    "techniques": ["T1595", "T1046"],
+    "incidentConfiguration": {
+      "createIncident": true,
+      "groupingConfiguration": {
+        "enabled": false,
+        "reopenClosedIncident": false,
+        "lookbackDuration": "PT5M",
+        "matchingMethod": "AllEntities"
+      }
+    },
+    "entityMappings": [
+      {
+        "entityType": "IP",
+        "fieldMappings": [
+          {
+            "identifier": "Address",
+            "columnName": "src_ip_s"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
