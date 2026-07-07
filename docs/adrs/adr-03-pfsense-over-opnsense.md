@@ -5,7 +5,7 @@
 
 ## Options considered
 
-**pfSense CE** and **OPNsense** are both open-source FreeBSD-based firewall/router distributions. They are functionally very similar - both support VLAN tagging, multi-interface routing, stateful packet inspection, and a web-based management UI.
+**pfSense CE** and **OPNsense** are both open-source FreeBSD-based firewall/router distributions. They are functionally very similar, both support VLAN tagging, multi-interface routing, stateful packet inspection, and a web-based management UI.
 
 ## Decision
 
