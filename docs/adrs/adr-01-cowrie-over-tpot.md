@@ -21,11 +21,11 @@ A honeypot was required for the DMZ zone to emulate vulnerable services, capture
 
 T-Pot requires a dedicated VM with 8–16GB RAM to run its bundled ELK stack alongside the honeypot daemons. On a 16GB host running five other VMs, this would exhaust the available memory budget entirely and make stable operation of the full lab impossible.
 
-Cowrie on Ubuntu runs comfortably in 512MB RAM - leaving the remaining VM budget available for pfSense, Windows Server, Kali, and Shuffle SOAR.
+Cowrie on Ubuntu runs comfortably in 512MB RAM, leaving the remaining VM budget available for pfSense, Windows Server, Kali, and Shuffle SOAR.
 
 Beyond the resource constraint, Cowrie alone satisfies every detection requirement for this lab: SSH and Telnet emulation, session recording, structured JSON logs, and configurable credential acceptance. T-Pot's additional honeypot daemons (HTTP, SMB, RDP emulators) would add attack surface without adding proportional value to the detection scenarios being tested.
 
-The ELK stack bundled in T-Pot is also redundant given that Microsoft Sentinel serves as the SIEM - running two log aggregation platforms in the same lab would create complexity without benefit.
+The ELK stack bundled in T-Pot is also redundant given that Microsoft Sentinel serves as the SIEM. Running two log aggregation platforms in the same lab would create complexity without benefit.
 
 ## Consequences
 
