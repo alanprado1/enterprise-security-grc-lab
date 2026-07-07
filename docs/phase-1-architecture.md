@@ -39,7 +39,7 @@ The lab runs four isolated network zones inside VMware, connected through a sing
 A simpler design might use just a DMZ and an internal zone. Four zones were chosen deliberately:
 
 - **Simulated Internet zone** exists so the attacking machine (Kali) is architecturally identical to a real external attacker, without ever touching a real public IP or risking an ISP abuse complaint for generating brute-force traffic on a residential connection.
-- **DMZ** hosts only the honeypot — nothing else. If it were shared with other services, a compromise of the honeypot would put those services at risk too.
+- **DMZ** hosts only the honeypot, nothing else. If it were shared with other services, a compromise of the honeypot would put those services at risk too.
 - **Internal zone** simulates a real corporate endpoint, generating legitimate background telemetry (Windows Security Events) that a SOC analyst would need to distinguish from attacker activity.
 - **Management zone** is isolated because in a real enterprise, security tooling (SOAR platforms, SIEM collectors) sits on a hardened network that ordinary user traffic, and certainly internet traffic should never be able to reach.
 
@@ -79,10 +79,10 @@ Planned against a 16GB RAM host before any VM was built:
 
 Mapped at the design stage so that the attack simulation in Phase 3 would have specific, named techniques to demonstrate rather than vague "attack testing":
 
-- **T1110** — Brute Force (Kali performs, Cowrie detects)
-- **T1595** — Active Scanning (Kali performs, Cowrie/pfSense detects)
-- **T1046** — Network Service Discovery (Kali performs, Cowrie/pfSense detects)
-- **T1562** — Impair Defenses (simulated firewall rule failure scenario)
+- **T1110** - Brute Force (Kali performs, Cowrie detects)
+- **T1595** - Active Scanning (Kali performs, Cowrie/pfSense detects)
+- **T1046** - Network Service Discovery (Kali performs, Cowrie/pfSense detects)
+- **T1562** - Impair Defenses (simulated firewall rule failure scenario)
 
 ## ISO 27001 controls mapped at design stage
 
