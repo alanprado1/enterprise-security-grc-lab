@@ -15,8 +15,8 @@ The standard approach for forwarding on-premises logs to Microsoft Sentinel is t
 
 **Solution adopted:** Direct HTTP Data Collector API ingestion via Python scripts running as cron jobs on each source VM. This approach:
 - Uses the same underlying Log Analytics ingestion endpoint
-- Is fully supported and stable (despite being listed as "legacy" — the endpoint remains active)
-- Produces identical data in Sentinel — the `CowrieLogs_CL` and `WindowsSecurityEvents_CL` tables are queryable with standard KQL
+- Is fully supported and stable (despite being listed as "legacy" - the endpoint remains active)
+- Produces identical data in Sentinel - the `CowrieLogs_CL` and `WindowsSecurityEvents_CL` tables are queryable with standard KQL
 - Requires no agents, no Azure Arc, no Data Collection Rules
 
 ### Cowrie log forwarder
@@ -59,7 +59,7 @@ Collects Event IDs:
 
 Four scheduled analytics rules were deployed. Due to personal Microsoft account limitations with the Defender portal's Unified RBAC model, three rules were created via the Azure CLI using the Sentinel REST API directly rather than through the portal UI.
 
-### Rule 1 — Cowrie SSH Brute Force Detection
+### Rule 1 - Cowrie SSH Brute Force Detection
 
 ```kql
 CowrieLogs_CL
@@ -75,7 +75,7 @@ CowrieLogs_CL
 - Runs every 5 minutes, looks back 1 hour
 - Entity mapping: IP → src_ip_s
 
-### Rule 2 — Cowrie Honeypot Successful Login
+### Rule 2 - Cowrie Honeypot Successful Login
 
 ```kql
 CowrieLogs_CL
@@ -86,7 +86,7 @@ CowrieLogs_CL
 - Severity: **High**
 - Tactics: Initial Access
 - Techniques: T1110
-- Any successful login to the honeypot is always suspicious — no threshold required
+- Any successful login to the honeypot is always suspicious - no threshold required
 
 ### Rule 3 - Windows Failed Logon Attempts
 
@@ -115,7 +115,7 @@ CowrieLogs_CL
 - Severity: **Medium**
 - Tactics: Reconnaissance, Discovery
 - Techniques: T1595, T1046
-- Deployed via Azure CLI — see `configs/sentinel-analytics-rules/cowrie-port-scan-detection.json`
+- Deployed via Azure CLI, check `configs/sentinel-analytics-rules/cowrie-port-scan-detection.json`
 
 ### Rule 5 - Honeypot Egress Violation
 
@@ -129,7 +129,7 @@ CowrieLogs_CL
 - Tactics: Defense Evasion
 - Techniques: T1562
 - Fires if an attacker inside Cowrie attempts to tunnel outbound connections
-- Deployed via Azure CLI — see `configs/sentinel-analytics-rules/honeypot-egress-violation.json`
+- Deployed via Azure CLI, check `configs/sentinel-analytics-rules/honeypot-egress-violation.json`
 
 ## SOAR automated response
 
@@ -156,9 +156,9 @@ See [ADR-04](adrs/adr-04-shuffle-soar-choice.md) for full reasoning.
 
 Two free-tier threat intelligence feeds are integrated:
 
-**AlienVault OTX** — queries the OTX IPv4 indicator endpoint for the attacker IP, returning pulse count (number of threat reports) and reputation score.
+**AlienVault OTX** - queries the OTX IPv4 indicator endpoint for the attacker IP, returning pulse count (number of threat reports) and reputation score.
 
-**AbuseIPDB** — queries the check endpoint for the attacker IP, returning abuse confidence score (0-100%), total reports, country of origin, and ISP.
+**AbuseIPDB** - queries the check endpoint for the attacker IP, returning abuse confidence score (0-100%), total reports, country of origin, and ISP.
 
 Both results are embedded in the automated Sentinel incident comment, giving the SOC analyst immediate context without needing to manually look up the attacker IP.
 
@@ -182,7 +182,7 @@ country None, ISP None
 **Result:** Cowrie logged every attempt. Sentinel brute force rule fired within 5 minutes. SOAR posted automated response comment with threat intel.  
 **Evidence:** Screenshots 24, 25, 26
 
-### Scenario B — Network Reconnaissance (T1595, T1046)
+### Scenario B - Network Reconnaissance (T1595, T1046)
 
 **Tool:** Nmap full port scan + rapid TCP connection loop  
 **Command:** `nmap -sS -sV -p- --disable-arp-ping -Pn 192.168.10.10`  
@@ -192,9 +192,9 @@ country None, ISP None
 ### Scenario C - Firewall Egress Failure (T1562)
 
 **Scenario:** Zero-egress block rule temporarily disabled to simulate a firewall misconfiguration or policy failure.  
-**Result (baseline):** Cowrie cannot reach Kali (10.0.0.10) — zero-egress confirmed working.  
-**Result (misconfigured):** With zero-egress disabled and a temporary ICMP allow rule added, Cowrie successfully reaches Kali - demonstrating what a firewall failure would allow.  
-**Result (remediated):** Zero-egress rule re-enabled, temp rule deleted - egress blocked again.  
+**Result (baseline):** Cowrie cannot reach Kali (10.0.0.10), zero-egress confirmed working.  
+**Result (misconfigured):** With zero-egress disabled and a temporary ICMP allow rule added, Cowrie successfully reaches Kali, demonstrating what a firewall failure would allow.  
+**Result (remediated):** Zero-egress rule re-enabled, temp rule deleted, egress blocked again.  
 **Evidence:** Screenshots 33, 34, 35, 36  
 
 > **Detection note:** The Honeypot Egress Violation Sentinel rule (Rule 5) fires specifically on Cowrie's `direct-tcpip` events - these appear when an attacker inside Cowrie's fake shell attempts to tunnel connections outbound. The scenario above used ICMP ping to demonstrate the firewall failure concept; a real attacker using SSH port forwarding would generate the `direct-tcpip` events that trigger Rule 5.
