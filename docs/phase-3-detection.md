@@ -1,8 +1,8 @@
-# Phase 3 — Detection & SOAR
+# Phase 3 - Detection & SOAR
 
 ## Objective
 
-Build the detection pipeline from raw honeypot logs through to automated incident response, and validate it with real simulated attacks. The goal was a fully automated chain: attack occurs → logs forwarded → Sentinel correlates → incident created → SOAR responds → threat intel enriched — all without manual intervention.
+Build the detection pipeline from raw honeypot logs through to automated incident response, and validate it with real simulated attacks. The goal was a fully automated chain: attack occurs → logs forwarded → Sentinel correlates → incident created → SOAR responds → threat intel enriched all without manual intervention.
 
 ## Log ingestion architecture
 
@@ -26,7 +26,7 @@ The standard approach for forwarding on-premises logs to Microsoft Sentinel is t
 **Source:** `/home/cowrie/cowrie/var/log/cowrie/cowrie.json`  
 **Destination:** `CowrieLogs_CL` table in Log Analytics workspace
 
-The script tracks its position in the log file via `/opt/cowrie-sentinel.pos` and only forwards new entries since the last run. Log rotation detection is built in — if the file shrinks below the saved position, the position resets to 0 automatically.
+The script tracks its position in the log file via `/opt/cowrie-sentinel.pos` and only forwards new entries since the last run. Log rotation detection is built in, if the file shrinks below the saved position, the position resets to 0 automatically.
 
 Key Cowrie fields available in Sentinel after ingestion:
 
@@ -48,12 +48,12 @@ Key Cowrie fields available in Sentinel after ingestion:
 **Destination:** `WindowsSecurityEvents_CL` table
 
 Collects Event IDs:
-- **4624** — Successful logon
-- **4625** — Failed logon
-- **4648** — Logon with explicit credentials
-- **4720** — User account created
-- **4732** — User added to security group
-- **4672** — Special privileges assigned
+- **4624** - Successful logon
+- **4625** - Failed logon
+- **4648** - Logon with explicit credentials
+- **4720** - User account created
+- **4732** - User added to security group
+- **4672** - Special privileges assigned
 
 ## Microsoft Sentinel analytics rules
 
@@ -88,7 +88,7 @@ CowrieLogs_CL
 - Techniques: T1110
 - Any successful login to the honeypot is always suspicious — no threshold required
 
-### Rule 3 — Windows Failed Logon Attempts
+### Rule 3 - Windows Failed Logon Attempts
 
 ```kql
 WindowsSecurityEvents_CL
@@ -102,7 +102,7 @@ WindowsSecurityEvents_CL
 - Tactics: Credential Access
 - Techniques: T1110
 
-### Rule 4 — Cowrie Port Scan Detection
+### Rule 4 - Cowrie Port Scan Detection
 
 ```kql
 CowrieLogs_CL
@@ -117,7 +117,7 @@ CowrieLogs_CL
 - Techniques: T1595, T1046
 - Deployed via Azure CLI — see `configs/sentinel-analytics-rules/cowrie-port-scan-detection.json`
 
-### Rule 5 — Honeypot Egress Violation
+### Rule 5 - Honeypot Egress Violation
 
 ```kql
 CowrieLogs_CL
@@ -171,11 +171,11 @@ OTX: 0 threat pulses, reputation score 0 | AbuseIPDB: confidence score 0%, 2 rep
 country None, ISP None
 ```
 
-> **Note:** The lab attacker IP (10.0.0.10 — Kali VM) is a private RFC1918 address with no real threat intelligence data. In a production deployment receiving real internet-sourced attacks, meaningful OTX pulse counts and AbuseIPDB confidence scores would appear.
+> **Note:** The lab attacker IP (10.0.0.10 - Kali VM) is a private RFC1918 address with no real threat intelligence data. In a production deployment receiving real internet-sourced attacks, meaningful OTX pulse counts and AbuseIPDB confidence scores would appear.
 
 ## Attack scenarios validated
 
-### Scenario A — SSH Brute Force (T1110.001)
+### Scenario A - SSH Brute Force (T1110.001)
 
 **Tool:** Hydra with rockyou.txt wordlist  
 **Command:** `hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://192.168.10.10 -t 4`  
@@ -189,15 +189,15 @@ country None, ISP None
 **Result:** Nmap identified port 22 open, presenting Cowrie's fake OpenSSH banner. Rapid connection loop (20 connections) triggered the Port Scan Detection rule. Incident created in Sentinel.  
 **Evidence:** Screenshots 29, 30, 31, 32
 
-### Scenario C — Firewall Egress Failure (T1562)
+### Scenario C - Firewall Egress Failure (T1562)
 
 **Scenario:** Zero-egress block rule temporarily disabled to simulate a firewall misconfiguration or policy failure.  
 **Result (baseline):** Cowrie cannot reach Kali (10.0.0.10) — zero-egress confirmed working.  
-**Result (misconfigured):** With zero-egress disabled and a temporary ICMP allow rule added, Cowrie successfully reaches Kali — demonstrating what a firewall failure would allow.  
-**Result (remediated):** Zero-egress rule re-enabled, temp rule deleted — egress blocked again.  
+**Result (misconfigured):** With zero-egress disabled and a temporary ICMP allow rule added, Cowrie successfully reaches Kali - demonstrating what a firewall failure would allow.  
+**Result (remediated):** Zero-egress rule re-enabled, temp rule deleted - egress blocked again.  
 **Evidence:** Screenshots 33, 34, 35, 36  
 
-> **Detection note:** The Honeypot Egress Violation Sentinel rule (Rule 5) fires specifically on Cowrie's `direct-tcpip` events — these appear when an attacker inside Cowrie's fake shell attempts to tunnel connections outbound. The scenario above used ICMP ping to demonstrate the firewall failure concept; a real attacker using SSH port forwarding would generate the `direct-tcpip` events that trigger Rule 5.
+> **Detection note:** The Honeypot Egress Violation Sentinel rule (Rule 5) fires specifically on Cowrie's `direct-tcpip` events - these appear when an attacker inside Cowrie's fake shell attempts to tunnel connections outbound. The scenario above used ICMP ping to demonstrate the firewall failure concept; a real attacker using SSH port forwarding would generate the `direct-tcpip` events that trigger Rule 5.
 
 ## KPI baselines recorded
 
@@ -211,4 +211,4 @@ From the brute force simulation:
 | Failed logins per minute (peak) | 454 |
 | Incidents auto-commented | 20 |
 
-Continue to [Phase 4 — GRC Mapping & Documentation](phase-4-grc.md)
+Continue to [Phase 4 - GRC Mapping & Documentation](phase-4-grc.md)
