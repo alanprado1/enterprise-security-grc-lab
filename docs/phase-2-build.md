@@ -114,18 +114,18 @@ The specific static route for `10.0.0.0/24` via pfSense's DMZ interface is requi
 
 ## Windows Server 2025
 
-**IP:** 192.168.20.10 — Internal zone
+**IP:** 192.168.20.10 - Internal zone
 
 **Configuration:**
 
 - Renamed to `INTERNAL-SRV01`
-- Windows Defender active — ISO A.8.7 evidence
+- Windows Defender active - ISO A.8.7 evidence
 - WinRM enabled for remote management
 - Audit policies configured via `auditpol`:
-  - Logon/Logoff — Success and Failure
-  - Account Logon — Success and Failure
-  - Privilege Use — Success and Failure
-  - Detailed Tracking — Success and Failure
+  - Logon/Logoff - Success and Failure
+  - Account Logon - Success and Failure
+  - Privilege Use - Success and Failure
+  - Detailed Tracking - Success and Failure
 
 Security Events are forwarded to Microsoft Sentinel every minute via a PowerShell script (`scripts/winserver-sentinel.ps1`) running as a Windows Scheduled Task with elevated privileges. The script collects Event IDs 4624, 4625, 4648, 4720, 4732, and 4672.
 
@@ -137,7 +137,7 @@ Deployed using the pre-built VMware image from kali.org. Network interface `eth0
 
 ## Shuffle SOAR (Ubuntu 26.04)
 
-**IP:** 192.168.30.10 — Management zone
+**IP:** 192.168.30.10 - Management zone
 
 Shuffle deployed via Docker Compose. Docker Swarm initialised to support Shuffle's Orborus worker architecture:
 
@@ -164,4 +164,4 @@ All inter-zone connectivity verified before Phase 3:
 | Windows Server | Cowrie (192.168.10.10) | any | Block | ✅ |
 | pfSense | Windows Server (192.168.20.10) | ICMP | Allow | ✅ |
 
-Continue to [Phase 3 — Detection & SOAR](phase-3-detection.md)
+Continue to [Phase 3 - Detection & SOAR](phase-3-detection.md)
