@@ -2,22 +2,22 @@
 
 ## Objective
 
-Provision all VMs in dependency order, configure network interfaces and static IPs, and verify connectivity between each zone before moving to detection configuration. Every VM was built manually — see [ADR-05](adrs/adr-05-manual-provisioning.md) for the reasoning behind choosing manual provisioning over IaC for this lab.
+Provision all VMs in dependency order, configure network interfaces and static IPs, and verify connectivity between each zone before moving to detection configuration. Every VM was built manually, check [ADR-05](adrs/adr-05-manual-provisioning.md) for the reasoning behind choosing manual provisioning over IaC for this lab.
 
 ## Build order and rationale
 
 VMs were provisioned in strict dependency order:
 
-1. **VMware virtual networks** — LAN Segments must exist before any VM is created
-2. **pfSense** — all other VMs need a gateway and firewall rules to exist first
-3. **Cowrie (Ubuntu)** — honeypot configured once its DMZ gateway exists
-4. **Windows Server** — internal endpoint configured once its gateway exists
-5. **Kali Linux** — attack VM, no dependencies other than the SIMINTERNET gateway
-6. **Shuffle SOAR (Ubuntu)** — management zone, configured last
+1. **VMware virtual networks**:LAN Segments must exist before any VM is created
+2. **pfSense**:all other VMs need a gateway and firewall rules to exist first
+3. **Cowrie (Ubuntu)**:honeypot configured once its DMZ gateway exists
+4. **Windows Server**:internal endpoint configured once its gateway exists
+5. **Kali Linux**:attack VM, no dependencies other than the SIMINTERNET gateway
+6. **Shuffle SOAR (Ubuntu)**:management zone, configured last
 
 ## VMware network configuration
 
-Rather than VMware's Host-only networks, the lab uses **LAN Segments** — a VMware feature that creates direct VM-to-VM connections bypassing the VMware virtual switch infrastructure entirely. This was necessary due to a known issue with Host-only network traffic passing between VMs on some Windows 11 configurations.
+Rather than VMware's Host-only networks, the lab uses **LAN Segments**, a VMware feature that creates direct VM-to-VM connections bypassing the VMware virtual switch infrastructure entirely. This was necessary due to a known issue with Host-only network traffic passing between VMs on some Windows 11 configurations.
 
 Four LAN Segments were created:
 
@@ -28,9 +28,9 @@ Four LAN Segments were created:
 | LAB-INTERNAL | Internal | 192.168.20.0/24 |
 | LAB-MGMT | Management | 192.168.30.0/24 |
 
-VMnet8 (NAT) was temporarily added to each VM during setup to allow internet access for package installation. It was removed from Windows Server and Kali once configuration was complete. It remains on Cowrie and Shuffle as the log forwarding path to Azure — see the design deviation note below.
+VMnet8 (NAT) was temporarily added to each VM during setup to allow internet access for package installation. It was removed from Windows Server and Kali once configuration was complete. It remains on Cowrie and Shuffle as the log forwarding path to Azure, see the design deviation note below.
 
-> **Design deviation — Cowrie internet path:** The original design called for Cowrie to forward logs through pfSense's INTERNAL zone, keeping VMnet8 fully removed. In practice, the zero-egress firewall rule on the DMZ blocks all outbound connections from Cowrie — including Azure log forwarding calls. Rather than create a specific egress exception that weakens honeypot isolation, VMnet8 (ens34) was retained on Cowrie as a dedicated, isolated log-forwarding path. This is an accepted trade-off: the honeypot remains isolated from all lab zones via pfSense, while retaining a separate out-of-band internet path for telemetry only.
+> **Design deviation Cowrie internet path:** The original design called for Cowrie to forward logs through pfSense's INTERNAL zone, keeping VMnet8 fully removed. In practice, the zero-egress firewall rule on the DMZ blocks all outbound connections from Cowrie including Azure log forwarding calls. Rather than create a specific egress exception that weakens honeypot isolation, VMnet8 (ens34) was retained on Cowrie as a dedicated, isolated log-forwarding path. This is an accepted trade-off: the honeypot remains isolated from all lab zones via pfSense, while retaining a separate out-of-band internet path for telemetry only.
 
 ## pfSense firewall
 
@@ -49,20 +49,20 @@ VMnet8 (NAT) was temporarily added to each VM during setup to allow internet acc
 **Firewall rules implemented:**
 
 DMZ zone rules (controlling traffic originating from Cowrie):
-- Block all outbound from DMZ to any destination — zero-egress policy (ISO A.8.20)
-- Block DMZ to INTERNAL — prevents lateral movement from honeypot to internal zone
+- Block all outbound from DMZ to any destination - zero-egress policy (ISO A.8.20)
+- Block DMZ to INTERNAL - prevents lateral movement from honeypot to internal zone
 - Allow SSH (port 22) inbound from SIMINTERNET to 192.168.10.10
 - Allow Telnet (port 23) inbound from SIMINTERNET to 192.168.10.10
 
 INTERNAL zone rules (controlling traffic from Windows Server):
-- Allow outbound port 443 to any — Sentinel log forwarding
-- Allow outbound port 53 UDP to any — DNS resolution for Azure endpoints
-- Block INTERNAL to DMZ — internal machines cannot probe the honeypot
+- Allow outbound port 443 to any - Sentinel log forwarding
+- Allow outbound port 53 UDP to any - DNS resolution for Azure endpoints
+- Block INTERNAL to DMZ - internal machines cannot probe the honeypot
 
 MGMT zone rules (controlling traffic from Shuffle SOAR):
-- Allow outbound port 443 to any — Sentinel REST API calls
-- Allow port 443 to pfSense — SOAR platform can call pfSense API
-- Block MGMT to DMZ — management systems cannot directly reach the honeypot
+- Allow outbound port 443 to any - Sentinel REST API calls
+- Allow port 443 to pfSense - SOAR platform can call pfSense API
+- Block MGMT to DMZ - management systems cannot directly reach the honeypot
 
 SIMINTERNET zone rules (controlling what Kali can reach):
 - Allow SSH (port 22) to 192.168.10.10 only
@@ -74,7 +74,7 @@ SIMINTERNET zone rules (controlling what Kali can reach):
 
 ## Cowrie honeypot (Ubuntu 26.04)
 
-**IP:** 192.168.10.10 — DMZ zone
+**IP:** 192.168.10.10 - DMZ zone
 
 **Key configuration:**
 
@@ -88,7 +88,7 @@ The `iptables-persistent` package saves this rule across reboots.
 
 Cowrie's `userdb.txt` is configured to reject most login attempts and accept only one specific credential pair. This generates realistic volumes of failed login events (T1110) while allowing attackers to eventually gain a fake shell session for TTY recording.
 
-JSON logging is enabled (`output_jsonlog = true`) — all session data is written to `var/log/cowrie/cowrie.json` in structured format for Sentinel ingestion.
+JSON logging is enabled (`output_jsonlog = true`) - all session data is written to `var/log/cowrie/cowrie.json` in structured format for Sentinel ingestion.
 
 Cowrie runs as a dedicated low-privilege `cowrie` user and starts automatically via a systemd service on boot.
 
@@ -110,7 +110,7 @@ network:
       dhcp4: yes
 ```
 
-The specific static route for `10.0.0.0/24` via pfSense's DMZ interface is required for Cowrie to send reply packets back to the attacker — without it, SYN packets arrive but no SYN-ACK is returned and connections time out silently.
+The specific static route for `10.0.0.0/24` via pfSense's DMZ interface is required for Cowrie to send reply packets back to the attacker, without it, SYN packets arrive but no SYN-ACK is returned and connections time out silently.
 
 ## Windows Server 2025
 
@@ -131,7 +131,7 @@ Security Events are forwarded to Microsoft Sentinel every minute via a PowerShel
 
 ## Kali Linux
 
-**IP:** 10.0.0.10 — Simulated Internet zone
+**IP:** 10.0.0.10 - Simulated Internet zone
 
 Deployed using the pre-built VMware image from kali.org. Network interface `eth0` configured with a static IP and default gateway pointing to pfSense's SIMINTERNET interface (10.0.0.1). All attack tools (Hydra, Nmap) are pre-installed in the Kali image.
 
