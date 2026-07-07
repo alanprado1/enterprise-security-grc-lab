@@ -1,4 +1,4 @@
-# Phase 4 - GRC Mapping & Documentation
+# Phase 4 - GRC Mapping and Documentation
 
 ## Objective
 
