@@ -6,15 +6,15 @@
 
 ## Context
 
-A SOAR platform was required to automate incident response - specifically to acknowledge new Sentinel incidents, enrich attacker IPs with threat intelligence, and post automated comments. The original design called for Shuffle SOAR to execute this workflow natively.
+A SOAR platform was required to automate incident response, specifically to acknowledge new Sentinel incidents, enrich attacker IPs with threat intelligence, and post automated comments. The original design called for Shuffle SOAR to execute this workflow natively.
 
 ## Options considered
 
 **Shuffle SOAR** is an open-source SOAR platform deployable via Docker Compose. It has a visual workflow editor, pre-built app integrations including Microsoft Sentinel, and a webhook trigger system.
 
-**Custom Python scripts** calling the Sentinel REST API directly - no dedicated SOAR platform.
+**Custom Python scripts** calling the Sentinel REST API directly, no dedicated SOAR platform.
 
-**Commercial SOAR platforms** (Splunk SOAR, Palo Alto XSOAR) - eliminated immediately due to cost (tens of thousands of dollars annually).
+**Commercial SOAR platforms** (Splunk SOAR, Palo Alto XSOAR), eliminated immediately due to cost (tens of thousands of dollars annually).
 
 ## Decision
 
@@ -22,14 +22,14 @@ A SOAR platform was required to automate incident response - specifically to ack
 
 ## Reasoning
 
-Shuffle was installed and configured successfully. The Orborus worker - Shuffle's execution engine - requires Docker Swarm to distribute workflow execution containers across nodes. On a single-VM deployment, Docker Swarm's overlay network configuration created persistent connectivity issues between the Orborus container and the backend API, preventing reliable workflow execution.
+Shuffle was installed and configured successfully. The Orborus worker (Shuffle's execution engine) requires Docker Swarm to distribute workflow execution containers across nodes. On a single-VM deployment, Docker Swarm's overlay network configuration created persistent connectivity issues between the Orborus container and the backend API, preventing reliable workflow execution.
 
 Rather than remove Shuffle entirely (which would require updating all diagrams, documentation, and the mind map), the architecture was revised to a hybrid model:
 
-- **Shuffle** remains deployed and documents the intended production workflow design - the visual workflow canvas shows the logical sequence (Get Token → Get Incidents → Post Comment) that a hiring manager or architect would expect to see
+- **Shuffle** remains deployed and documents the intended production workflow design, the visual workflow canvas shows the logical sequence (Get Token → Get Incidents → Post Comment).
 - **Python scripts** implement the same logic directly against the Sentinel REST API, providing reliable execution without Swarm dependency
 
-This approach is honest about the lab constraint while demonstrating knowledge of both SOAR platform design and direct API integration - a combination that reflects how production SOAR environments actually work (platforms augmented by custom integrations for complex or non-standard workflows).
+This approach is honest about the lab constraint while demonstrating knowledge of both SOAR platform design and direct API integration, a combination that reflects how production SOAR environments actually work (platforms augmented by custom integrations for complex or non-standard workflows).
 
 ## Consequences
 
