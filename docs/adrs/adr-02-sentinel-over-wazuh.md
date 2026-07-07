@@ -21,9 +21,9 @@ A SIEM was required to centralise logs from Cowrie and Windows Server, run corre
 
 The lab already had an existing Azure environment with a prior honeypot project. Reusing that Azure tenant avoided provisioning a new platform from scratch.
 
-More importantly, Microsoft Sentinel is the enterprise standard SIEM in a significant portion of the market - particularly in organisations running Microsoft 365 and Azure workloads. Demonstrating hands-on Sentinel experience (KQL queries, analytics rules, entity mapping, incident management) has direct portfolio value for roles in those environments. Wazuh experience, while valid, is more niche.
+More importantly, Microsoft Sentinel is the enterprise standard SIEM in a significant portion of the market, particularly in organisations running Microsoft 365 and Azure workloads. Demonstrating hands-on Sentinel experience (KQL queries, analytics rules, entity mapping, incident management) has direct portfolio value for roles in those environments. Wazuh experience, while valid, is more niche.
 
-Sentinel also eliminates the need for a dedicated SIEM VM. Wazuh requires 4GB RAM minimum for a functional installation - running it locally would have consumed a quarter of the available VM memory budget. Sentinel runs entirely in Azure at no compute cost to the lab host.
+Sentinel also eliminates the need for a dedicated SIEM VM. Wazuh requires 4GB RAM minimum for a functional installation, running it locally would have consumed a quarter of the available VM memory budget. Sentinel runs entirely in Azure at no compute cost to the lab host.
 
 The 5GB/month free ingestion tier is sufficient for the lab's log volume when the forwarder scripts are configured to send only alerts and session events rather than raw syslog.
 
