@@ -197,7 +197,7 @@ country None, ISP None
 **Result (remediated):** Zero-egress rule re-enabled, temp rule deleted, egress blocked again.  
 **Evidence:** Screenshots 33, 34, 35, 36  
 
-> **Detection note:** The Honeypot Egress Violation Sentinel rule (Rule 5) fires specifically on Cowrie's `direct-tcpip` events - these appear when an attacker inside Cowrie's fake shell attempts to tunnel connections outbound. The scenario above used ICMP ping to demonstrate the firewall failure concept; a real attacker using SSH port forwarding would generate the `direct-tcpip` events that trigger Rule 5.
+> **Detection note:** The Honeypot Egress Violation Sentinel rule (Rule 5) fires specifically on Cowrie's `direct-tcpip` events, these appear when an attacker inside Cowrie's fake shell attempts to tunnel connections outbound. The scenario above used ICMP ping to demonstrate the firewall failure concept, a real attacker using SSH port forwarding would generate the `direct-tcpip` events that trigger Rule 5.
 
 ## KPI baselines recorded
 
